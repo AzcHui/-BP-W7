@@ -1,0 +1,49 @@
+﻿<Window x:Class="智能化BP自动分析软件W7.peizhi"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:智能化BP自动分析软件W7"
+        mc:Ignorable="d"
+        Title="配置信息" Height="259" Width="326" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel>
+            <GroupBox Header="配置" Margin="3,3,3,0">
+                <StackPanel HorizontalAlignment="Left" Margin="3,0,0,0">
+                    <WrapPanel>
+                        <Label>涨停倍数：</Label>
+                        <TextBox x:Name="t1" Width="35" Height="22"></TextBox>
+                        <Label>倍下限金额，即赢利点</Label>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label>跌停倍数：</Label>
+                        <TextBox x:Name="t2" Width="35" Height="22"></TextBox>
+                        <Label>倍下限金额，即止损点</Label>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label>赢停次数：</Label>
+                        <TextBox x:Name="t3" Width="35" Height="22">4</TextBox>
+                        <Label>次，即连续小赢几次后及时收手</Label>
+                    </WrapPanel>
+                    <WrapPanel VerticalAlignment="Center">
+                        <Label Margin="0,9,0,0">报警手数：</Label>
+                        <TextBox x:Name="t4" Width="35" Height="22">10</TextBox>
+                        <Label x:Name="lab4">倍下限金额，\r\n即止损点</Label>
+                    </WrapPanel>
+                    <WrapPanel VerticalAlignment="Center">
+                        <Label Margin="0,9,0,0">跌停倍数：</Label>
+                        <TextBox x:Name="t5" Width="35" Height="22">40</TextBox>
+                        <Label x:Name="lab5">倍下限金额，即止损点</Label>
+                    </WrapPanel>
+                </StackPanel>
+            </GroupBox>
+            <WrapPanel HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Width="72" Click="Button_Click_1">默认值</Button>
+                <Button Width="72" Click="Button_Click" Margin="26,0,0,0">确定</Button>
+                <Button Width="72" Margin="26,0,0,0" Click="Button_Click_2">取消</Button>
+            </WrapPanel>
+        </StackPanel>
+        
+        
+    </Grid>
+</Window>
