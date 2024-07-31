@@ -248,6 +248,7 @@ private void Button_Click_1(object sender, RoutedEventArgs e)
                             if(zxzhis > 0) dizenggezifenshucishu = index2 + 1;
                             else dizenggezifenshucishu = index + 1;
                         }
+                        else dizenggezifenshucishu = index + 1;
                     }
                     else dizenggezifenshucishu = 0;
                 }
@@ -270,66 +271,73 @@ private void Button_Click_1(object sender, RoutedEventArgs e)
             }
         }
 
-private void UpdateShangyicijifen()
-{
-    // 跳过前四个元素，并过滤出那些 `Zxzhis` 可以被解析为整数的元素。
-    var filteredGezi2s = gezi2s.Skip(4).Where(x => int.TryParse(x.Zxzhis, out _)).ToList();
-
-    if (filteredGezi2s.Any())
+private static void UpdateShangyicijifen()
     {
-        // 获取最后一个元素的 `Zxzhis` 值并转换为整数。
-        string zxzhisValue = filteredGezi2s.Last().Zxzhis;
-        shangyicijifen = int.Parse(zxzhisValue);
+        // 跳过前四个元素，并过滤出那些 `Zxzhis` 可以被解析为整数的元素。
+        var filteredGezi2s = gezi2s.Skip(4).Where(x => int.TryParse(x.Zxzhis, out _)).ToList();
 
-        Debug.WriteLine("shangyicijifen: " + shangyicijifen);
-
-        // 使用二分查找在 `fenshuList` 数组中查找 `shangyicijifen` 的绝对值。
-        int index = Array.BinarySearch(fenshuList, Math.Abs(shangyicijifen));
-
-        // 初始化计数器为 0。
-        dizenggezifenshucishu = 0;
-
-        // 如果找到的索引大于 0，说明找到了匹配项。
-        if (index > 0)
+        if (filteredGezi2s.Any())
         {
-            // 如果过滤后的集合不止一个元素，使用倒数第二个元素进行额外处理。
-            if (filteredGezi2s.Count > 1)
-            {
-                int previousZxzhis = int.Parse(filteredGezi2s[filteredGezi2s.Count - 2].Zxzhis);
-                int previousIndex = Array.BinarySearch(fenshuList, Math.Abs(previousZxzhis));
+            // 获取最后一个元素的 `Zxzhis` 值并转换为整数。
+            string zxzhisValue = filteredGezi2s.Last().Zxzhis;
+            shangyicijifen = int.Parse(zxzhisValue);
 
-                // 根据上一个元素的值和索引来更新计数器。
-                if (previousZxzhis > 0)
+            Debug.WriteLine("shangyicijifen: " + shangyicijifen);
+
+            // 使用二分查找在 `fenshuList` 数组中查找 `shangyicijifen` 的绝对值。
+            int index = Array.BinarySearch(fenshuList, Math.Abs(shangyicijifen));
+
+            // 初始化计数器为 0。
+            dizenggezifenshucishu = 0;
+
+            // 如果找到的索引大于 0，说明找到了匹配项。
+            if (index >= 0)
+            {
+                // 如果过滤后的集合不止一个元素，使用倒数第二个元素进行额外处理。
+                if (filteredGezi2s.Count > 1)
                 {
-                    dizenggezifenshucishu = previousIndex + 1;
+                    int previousZxzhis = int.Parse(filteredGezi2s[filteredGezi2s.Count - 2].Zxzhis);
+                    int previousIndex = Array.BinarySearch(fenshuList, Math.Abs(previousZxzhis));
+
+                    // 确保 `previousIndex` 也大于 0（即找到了匹配项）。
+                    if (previousIndex >= 0 && previousZxzhis > 0)
+                    {
+                        // 根据上一个元素的值和索引来更新计数器。
+                        dizenggezifenshucishu = previousIndex + 1;
+                    }
+					else
+					{
+						dizenggezifenshucishu = index + 1;
+					}
                 }
                 else
                 {
+                    // 如果只有一个元素，直接使用当前索引加一。
                     dizenggezifenshucishu = index + 1;
                 }
             }
             else
             {
-                // 如果只有一个元素，直接使用当前索引加一。
-                dizenggezifenshucishu = index + 1;
+                // 如果没有找到匹配项并且过滤后的集合不止一个元素，则使用倒数第二个元素的索引。
+                if (filteredGezi2s.Count > 1)
+                {
+                    int previousZxzhis = int.Parse(filteredGezi2s[filteredGezi2s.Count - 2].Zxzhis);
+                    int previousIndex = Array.BinarySearch(fenshuList, Math.Abs(previousZxzhis));
+
+                    // 确保 `previousIndex` 也大于 0（即找到了匹配项）。
+                    if (previousIndex > 0)
+                    {
+                        dizenggezifenshucishu = previousIndex + 1;
+                    }
+                }
             }
+
+            Debug.WriteLine($"找到元素，下标为：{dizenggezifenshucishu}");
         }
         else
         {
-            // 如果没有找到匹配项并且过滤后的集合不止一个元素，则使用倒数第二个元素的索引。
-            if (filteredGezi2s.Count > 1)
-            {
-                int previousZxzhis = int.Parse(filteredGezi2s[filteredGezi2s.Count - 2].Zxzhis);
-                dizenggezifenshucishu = Array.BinarySearch(fenshuList, Math.Abs(previousZxzhis)) + 1;
-            }
+            // 如果没有符合条件的元素，则将 `shangyicijifen` 设置为 1。
+            shangyicijifen = 1;
         }
+    }
 
-        Debug.WriteLine($"找到元素，下标为：{dizenggezifenshucishu}");
-    }
-    else
-    {
-        // 如果没有符合条件的元素，则将 `shangyicijifen` 设置为 1。
-        shangyicijifen = 1;
-        dizenggezifenshucishu = 0;
-    }
-}
