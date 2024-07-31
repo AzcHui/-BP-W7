@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -28,11 +29,11 @@ namespace 智能化BP自动分析软件W7
         {
             InitializeComponent();
             chushihua();
-           /* var s = new List<int>() { 1, 2, 3, 4, 5 };
-            var w = s.Skip(4).Where(x => {
-                Debug.WriteLine(x);
-                return true;
-            }).ToList();*/
+            /* var s = new List<int>() { 1, 2, 3, 4, 5 };
+             var w = s.Skip(4).Where(x => {
+                 Debug.WriteLine(x);
+                 return true;
+             }).ToList();*/
             //tb1.Text = "实\r\n时\r记\n录区";
             denglu d = new denglu();
             d.ShowDialog();
@@ -64,11 +65,11 @@ namespace 智能化BP自动分析软件W7
                 border.BorderThickness = new Thickness(1);
                 border.Child = g;
                 border.BorderBrush = new SolidColorBrush(Colors.Black);
-                border.Margin =g.Margin= new Thickness(0);
+                border.Margin = g.Margin = new Thickness(0);
                 if (i > 5)
                 {
                     var q = border.Margin;
-                    q.Left= -1;
+                    q.Left = -1;
                     border.Margin = q;
                 }
                 if (i % 6 == 1)
@@ -80,7 +81,7 @@ namespace 智能化BP自动分析软件W7
                 if (i % 6 != 0)
                 {
                     var q = border.BorderThickness;
-                    q.Top = 0; 
+                    q.Top = 0;
                     border.BorderThickness = q;
                 }
                 if (i % 6 == 3)
@@ -224,7 +225,8 @@ namespace 智能化BP自动分析软件W7
         int jilusuoyin = 0;
         int sfsuoyin = 0;
         int cunchusuoyin = -1;
-        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) { 
+        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             HandleButtonClick("庄");
         }
         private void Label_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
@@ -257,7 +259,7 @@ namespace 智能化BP自动分析软件W7
         private void UpdateScoreAndNotify(string betType)
         {
             var previousBet = gezi2s[jilusuoyin - 1];
-            if(previousBet.Zxzhis == "停") return;
+            if (previousBet.Zxzhis == "停") return;
             if (previousBet.Zxzhis == betType)
             {
                 // 如果赌注类型与前一次相同，则根据赌注类型更新分数
@@ -311,121 +313,9 @@ namespace 智能化BP自动分析软件W7
                 tishil.Foreground = Brushes.Red;
             }
         }
-        /*private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        void tishi( bool isFanhui = false )
         {
-            if (jilusuoyin > 65)
-            {
-                return;
-            }
-            gezi1s[jilusuoyin].Zxzhis = "庄";
-            jilusuoyin++;
-            if (jilusuoyin == 4)
-            {
-                tishi();
-            }
-            if (jilusuoyin > 4)
-            {
-
-                var s = gezi2s[jilusuoyin - 1];
-                if (s.Zxzhis == "庄")
-                {
-                    zongfen += s.Fenshu;
-                    s.Zxzhis = $"+{s.Fenshu}";
-                    shangyicijifen = s.Fenshu;
-
-                }
-                else if (s.Zxzhis == "闲")
-                {
-                    zongfen += s.Fenshu * -1;
-                    s.Zxzhis = $"-{s.Fenshu}";
-                    shangyicijifen = s.Fenshu * -1;
-                }
-                tishi();
-            }
-
-            jisuanfenshu();
-        }
-        int cunchusuoyin = -1;
-        private void jisuanfenshu()
-        {
-            double s = gezi2s.Sum(x => x.Fenshu) - gezi2s[jilusuoyin].Fenshu;
-            if (s == 0)
-            {
-                xinxil.Content = $"{0}分，收益率{0}%";
-                return;
-            }
-
-            xinxil.Content = $"{zongfen}分，收益率{((double)zongfen / s * 100).ToString("F0")}%";
-
-            if (zongfen >= shangxian || zongfen < xiaxian * -1)
-            {
-                if (zongfen >= shangxian)
-                {
-                    tishil.Content = $"本局结束，总计赢{zongfen}倍下限";
-                }
-                else
-                {
-                    tishil.Content = "本局结束，总计赢0倍下限";
-                }
-                cunchusuoyin = jilusuoyin;
-                jilusuoyin = 66;
-                tishil.Foreground = Brushes.Red;
-            }
-            Debug.WriteLine(s);
-        }
-
-        private void Label_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
-        {
-            if (jilusuoyin > 65)
-            {
-                return;
-            }
-            gezi1s[jilusuoyin].Zxzhis = "闲";
-            jilusuoyin++;
-            if (jilusuoyin == 4)
-            {
-                tishi();
-            }
-            if (jilusuoyin > 4)
-            {
-                gezi2 s1 = gezi2s.Where(x =>
-                {
-                    return int.TryParse(x.Zxzhis, out int c);
-                }).Last();
-                var s = gezi2s[jilusuoyin - 1];
-                if (s.Zxzhis == "闲")
-                {
-                    zongfen += s.Fenshu;
-                    s.Zxzhis = $"+{s.Fenshu}";
-                    shangyicijifen = s.Fenshu;
-                }
-                else if (s.Zxzhis == "庄")
-                {
-                    zongfen += s.Fenshu * -1;
-                    s.Zxzhis = $"-{s.Fenshu}";
-                    shangyicijifen = s.Fenshu * -1;
-                }
-                tishi();
-            }
-            jisuanfenshu();
-        }
-
-        private void Label_MouseLeftButtonDown_2(object sender, MouseButtonEventArgs e)
-        {
-            if (jilusuoyin > 65)
-            {
-                return;
-            }
-            gezi1s[jilusuoyin].Zxzhis = "和";
-            jilusuoyin++;
-            if (jilusuoyin > 3)
-            {
-                tishi();
-            }
-        }
-        */
-        void tishi()
-        {
+            if (jilusuoyin >= gezi2s.Count) return;
             var r = gezi1s.Where(x =>
             {
                 return x.Zxzhis == "庄" || x.Zxzhis == "闲";
@@ -451,39 +341,39 @@ namespace 智能化BP自动分析软件W7
                     q += "x";
                 }
             }
-            var ls=new List<jubudata>();
+            var ls = new List<jubudata>();
             foreach (var x in jbguizes)
             {
-                if (x.da.Length == q.Length + 1&&x.da.Substring(0,x.da.Length-1)==q)
+                if (x.da.Length == q.Length + 1 && x.da.Substring(0, x.da.Length - 1) == q)
                 {
                     ls.Add(x);
                 }
-                else if (x.da.Length == 5 && q.Length == 5 && x.da.Substring(0, 4) == q.Substring(1,4))
+                else if (x.da.Length == 5 && q.Length == 5 && x.da.Substring(0, 4) == q.Substring(1, 4))
                 {
                     ls.Add(x);
                 }
-                else if(x.da.Length >= q.Length)
+                else if (x.da.Length >= q.Length)
                 {
                     //不匹配
                 }
                 else
                 {
                     var len = x.da.Length;
-                    var q2=q.Substring(q.Length- len+1).ToString();
-                    if (x.da.Substring(0,x.da.Length-1)== q2)
+                    var q2 = q.Substring(q.Length - len + 1).ToString();
+                    if (x.da.Substring(0, x.da.Length - 1) == q2)
                     {
                         ls.Add(x);
                     }
                 }
-                
+
             }
             var t = ls.OrderByDescending(x =>
             {
                 return x.da.Length;
             }).FirstOrDefault();
-            if (t!= null)
+            if (t != null)
             {
-                var tt=ls.OrderByDescending(x =>
+                var tt = ls.OrderByDescending(x =>
                 {
                     return x.da.Length;
                 }).ToList();
@@ -509,125 +399,49 @@ namespace 智能化BP自动分析软件W7
                 tishil.Content = $"第{jilusuoyin + 1}手请暂停下注";
                 tishil.Foreground = Brushes.Red;
             }
-            dangqiangefenshu();
+            dangqiangefenshu(isFanhui);
             if (gezi2s[jilusuoyin].Zxzhis == "庄" || gezi2s[jilusuoyin].Zxzhis == "闲")
             {
                 tishil.Foreground = (gezi2s[jilusuoyin].Zxzhis == "庄") ? Brushes.Red : Brushes.Blue;
-                tishil.Content = $"第{jilusuoyin+1}手请下注，{gezi2s[jilusuoyin].Zxzhis}:{gezi2s[jilusuoyin].Fenshu}倍下限";
+                tishil.Content = $"第{jilusuoyin + 1}手请下注，{gezi2s[jilusuoyin].Zxzhis}:{gezi2s[jilusuoyin].Fenshu}倍下限";
             }
 
         }
         int dizenggezifenshucishu = 0;
-        int shangyicijifen = 1;
+        int shangyicijifen = 0;
         int[] fenshuList = new int[] { 1, 2, 3, 4, 5, 7, 10, 14, 18, 24, 32, 44, 60, 80 };
-        void dangqiangefenshu()
+        void dangqiangefenshu(bool isFanhui = false)
         {
-            if (gezi2s[jilusuoyin].Zxzhis == "停" || gezi1s[jilusuoyin - 1].Zxzhis == "和") 
+            if (gezi2s[jilusuoyin].Zxzhis == "停" || gezi1s[jilusuoyin - 1].Zxzhis == "和")
             {
                 gezi2s[jilusuoyin].Fenshu = gezi2s[jilusuoyin - 1].Fenshu;
                 return;
             }
-            if ( shangyicijifen > 1 )
+            if (!isFanhui)
             {
-                if (zongfen == 3 && jilusuoyin == 6)
+                if (shangyicijifen > 0)
                 {
-                    dizenggezifenshucishu = 0;
-                }
-                else
-                {
-                    gezi2s[jilusuoyin].Fenshu = shangyicijifen * 2;
-                    return;
-                }
-            }
-            if(dizenggezifenshucishu < 0) dizenggezifenshucishu = 1;
-            gezi2s[jilusuoyin].Fenshu = fenshuList[dizenggezifenshucishu];
-            dizenggezifenshucishu++;
-        }
-        /** void dangqiangefenshu()
-        {
-            // dizenggezifenshucishu++;
-            // Debug.WriteLine(gezi1s[jilusuoyin-1].Zxzhis=="和");
-            if (gezi1s[jilusuoyin - 1].Zxzhis == "和") return;
-            if (shangyicijifen == 0)
-            {
-                if (gezi2s[jilusuoyin].Zxzhis == "停")
-                {
-                    dizenggezifenshucishu = 0;
-                }
-                else
-                {
-                    dizenggezifenshucishu++;
-                }
-            }
-            else if (shangyicijifen < 0)
-            {
-                if (gezi2s[jilusuoyin].Zxzhis == "停")
-                {
-                    dizenggezifenshucishu = 0;
-                }
-                else if (jilusuoyin == 4)
-                {
-                    dizenggezifenshucishu = 1;
-                }
-                else
-                {
-                    dizenggezifenshucishu++;
-                }
-                // 创建一个条件和值的映射字典
-                Dictionary<int, int> scoreThresholds = new Dictionary<int, int>
-                {
-                    { -221, 80 },
-                    { -161, 60 },
-                    { -117, 44 },
-                    { -85, 32 },
-                    { -61, 24 },
-                    { -43, 18 },
-                    { -29, 14 },
-                    { -19, 10 },
-                    { -12, 7 },
-                    { -10, 5 }
-                };
-
-                // 遍历字典，找到第一个满足条件的值
-                foreach (var threshold in scoreThresholds)
-                {
-                    if (zongfen <= threshold.Key)
+                    if (zongfen == 3 && jilusuoyin == 6)
                     {
-                        dizenggezifenshucishu = threshold.Value;
-                        break;
+                        dizenggezifenshucishu = 0;
+                    }
+                    else
+                    {
+                        gezi2s[jilusuoyin].Fenshu = shangyicijifen * 2;
+                        return;
                     }
                 }
+                if (dizenggezifenshucishu < 0) dizenggezifenshucishu = 0;
+                if (dizenggezifenshucishu >= fenshuList.Length) dizenggezifenshucishu = fenshuList.Length - 1;
+                gezi2s[jilusuoyin].Fenshu = fenshuList[dizenggezifenshucishu];
+                dizenggezifenshucishu++;
             }
-            else if (shangyicijifen > 0)
-            {
-                dizenggezifenshucishu = shangyicijifen * 2;
-            }
-            // if (gezi2s[jilusuoyin].Zxzhis == "停")
-            // {
-            //     dizenggezifenshucishu = 0;
-            // }
-            // else if (jilusuoyin == 4)
-            // {
-            //     dizenggezifenshucishu = 1;
-            // }
-            
-            if (zongfen == 3 && jilusuoyin == 6) dizenggezifenshucishu = 1;
-            else if (zongfen == 0 && jilusuoyin == 9) dizenggezifenshucishu = 3;
-            else if (zongfen == -1 && jilusuoyin == 6) dizenggezifenshucishu = 2;
-            else if (zongfen == 0 && jilusuoyin == 7) dizenggezifenshucishu = 4;
-
-            if (gezi2s[jilusuoyin].Zxzhis == "停")
-            {
-                dizenggezifenshucishu = 0;
-            }
-            gezi2s[jilusuoyin].Fenshu = dizenggezifenshucishu;
-
-        } **/
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             dizenggezifenshucishu = 0;
-            shangyicijifen = 1;
+            shangyicijifen = 0;
             jilusuoyin = 0;
             zongfen = 0;
             chushihua();
@@ -636,91 +450,119 @@ namespace 智能化BP自动分析软件W7
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if (jilusuoyin == 0 )
+            if (jilusuoyin == 0)
             {
                 return;
             }
-            if(cunchusuoyin > 0 && jilusuoyin >= 66)
+            if (cunchusuoyin > 0 && jilusuoyin >= 66)
             {
                 dizenggezifenshucishu++;
-                jilusuoyin =cunchusuoyin;
-                //重置记录
+                jilusuoyin = cunchusuoyin;
                 cunchusuoyin = -1;
             }
-            if (jilusuoyin < 6)
+            if (jilusuoyin >= 6)
             {
-                var t = jilusuoyin - 1;
-                List<string> list = new List<string>();
-                for (int i = 0; i < t; i++)
-                {
-                    list.Add(gezi1s[i].Zxzhis);
-                }
-                Button_Click(null,null);
-                foreach (var item in list)
-                {
-                    if (item == "庄")
-                    {
-                        Label_MouseLeftButtonDown(null, null);
-                    }
-                    if (item == "闲")
-                    {
-                        Label_MouseLeftButtonDown_1(null, null);
-                    }
-                    if (item == "和")
-                    {
-                        Label_MouseLeftButtonDown_2(null, null);
-                    }
-                }
-                return;
+                ClearGeziData();
             }
+            else
+            {
+                ProcessLowJilusuoyin();
+            }
+            CalculateScore();
+        }
+
+        private void ProcessLowJilusuoyin()
+        {
+            var t = jilusuoyin - 1;
+            var list = new List<string>();
+            for (int i = 0; i < t; i++)
+            {
+                list.Add(gezi1s[i].Zxzhis);
+            }
+            Button_Click(null, null); // Assuming this is a method that needs to be called.
+            foreach (var item in list)
+            {
+                switch (item)
+                {
+                    case "庄":
+                        Label_MouseLeftButtonDown(null, null);
+                        break;
+                    case "闲":
+                        Label_MouseLeftButtonDown_1(null, null);
+                        break;
+                    case "和":
+                        Label_MouseLeftButtonDown_2(null, null);
+                        break;
+                }
+            }
+        }
+
+        private void ClearGeziData()
+        {
+            if (jilusuoyin >= 66) jilusuoyin--;
             gezi1s[jilusuoyin].Zxzhis = "";
             gezi2s[jilusuoyin].Zxzhis = "";
             gezi2s[jilusuoyin].Fenshu = 0;
             jilusuoyin--;
             gezi1s[jilusuoyin].Zxzhis = "";
-            var s = gezi2s[jilusuoyin].Zxzhis;
-            var q = 0;
-            if (s == "庄" || s == "闲" || s == "停")
-            {
-                q = 0;
-            }
-            else
-            {
-                q = int.Parse(s);
-            }
+
+            var q = ParseScore(gezi2s[jilusuoyin].Zxzhis);
             gezi2s[jilusuoyin].Zxzhis = "";
             zongfen -= q;
-            var r = gezi2s.Skip(4).ToList().Where(x =>
+
+            UpdateShangyicijifen();
+
+        }
+
+        private int ParseScore(string scoreStr)
+        {
+            if (string.IsNullOrEmpty(scoreStr) || scoreStr == "庄" || scoreStr == "闲" || scoreStr == "停")
             {
-                return int.TryParse(x.Zxzhis, out int c);
-            }).ToList();
-            if (r.Count > 0)
+                return 0;
+            }
+            return int.Parse(scoreStr);
+        }
+
+        private void UpdateShangyicijifen()
+        {
+            var r = gezi2s.Skip(4).Where(x => int.TryParse(x.Zxzhis, out _)).ToList();
+            if (r.Any())
             {
                 string zxzhisValue = r.Last().Zxzhis;
-                int result;
-                bool success = int.TryParse(zxzhisValue, out result);
-
-                if (success)
+                shangyicijifen = int.Parse(zxzhisValue);
+                Debug.WriteLine("shangyicijifen:" + shangyicijifen);
+                /*if (shangyicijifen < 0) dizenggezifenshucishu--;*/
+                int index = Array.BinarySearch(fenshuList, Math.Abs(shangyicijifen));
+                if (index > 0)
                 {
-                    shangyicijifen = result;
-                    Debug.WriteLine(shangyicijifen + ",ss");
-                    if (dizenggezifenshucishu > 0 && result <= 1) dizenggezifenshucishu -= 2;
+                    if(shangyicijifen < 0)
+                    if (r.Count > 1)
+                    {
+                        int zxzhis = int.Parse(r[r.Count - 2].Zxzhis);
+                        if (zxzhis > 0)
+                        {
+                            index = Array.BinarySearch(fenshuList, Math.Abs(zxzhis));
+                            dizenggezifenshucishu = index + 1;
+                        }
+                        else
+                        {
+                            index = Array.BinarySearch(fenshuList, Math.Abs(shangyicijifen));
+                            dizenggezifenshucishu = index + 1;
+                        }
+                    }
                 }
-                else
-                {
-                    // 转换失败，可以设置默认值或抛出异常
-                    shangyicijifen = 1; // 或者你认为合适的默认值
-                                        // 或者抛出异常
-                    throw new InvalidOperationException("The value could not be converted to an integer.");
-                }
-                /*shangyicijifen = r.Last().Zxzhis;
-                Debug.WriteLine(shangyicijifen+ ",ss");*/
+                /*else dizenggezifenshucishu--;*/
+                Debug.WriteLine($"找到元素，下标为：{dizenggezifenshucishu}");
             }
             else
             {
                 shangyicijifen = 1;
             }
-            tishi();
+        }
+
+        private void CalculateScore()
+        {
+            tishi(true);
             jisuanfenshu();
         }
 
